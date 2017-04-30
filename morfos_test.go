@@ -17,8 +17,12 @@ func TestStructsSameSize(t *testing.T) {
 	}
 
 	orig := original{x: 100, y: 200}
-	morphed := morfos.Morph(orig, notoriginal{})
+	_, ok := interface{}(orig).(notoriginal)
+	if ok {
+		t.Fatal("casting should be invalid")
+	}
 
+	morphed := morfos.Morph(orig, notoriginal{})
 	morphedNotOriginal, ok := morphed.(notoriginal)
 
 	if !ok {

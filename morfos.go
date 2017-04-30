@@ -35,12 +35,12 @@ type rtype struct {
 }
 
 type eface struct {
-	typ  unsafe.Pointer
-	word unsafe.Pointer
+	Type unsafe.Pointer
+	Word unsafe.Pointer
 }
 
-func getEface(i interface{}) eface {
-	return *(*eface)(unsafe.Pointer(&i))
+func geteface(i *interface{}) *eface {
+	return (*eface)(unsafe.Pointer(i))
 }
 
 // Morph will coerce the given value to the type stored on desiredtype
@@ -50,5 +50,8 @@ func getEface(i interface{}) eface {
 //
 // The result value should be castable to the type of desiredtype.
 func Morph(value interface{}, desiredtype interface{}) interface{} {
-	return nil
+	valueeface := geteface(&value)
+	typeeface := geteface(&desiredtype)
+	valueeface.Type = typeeface.Type
+	return value
 }
